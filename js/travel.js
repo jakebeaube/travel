@@ -8,8 +8,8 @@ var queryDestination = "&dKind=City&dName="
 var routeCounter = 0;
 var resultsRoutes = [];
 var resultsPlaces = [];
-var latLongOrigin   =[];
-var latLongDest =[];
+var latLongOrigin = [];
+var latLongDest = [];
 var resultsStops = [];
 var routeCounter = 0;
 var list = []; //holds long and lat. 
@@ -41,20 +41,20 @@ function runQuery(queryURL) {
         var latLongDest = resultsPlaces[1].pos.split(",");
 
 
-       var map = new google.maps.Map(document.getElementById('map'), {
+        var map = new google.maps.Map(document.getElementById('map'), {
 
-        zoom: 4,
+            zoom: 4,
 
-        center: { lat: Number(latLongOrigin[0]), lng:Number(latLongOrigin[1])} 
+            center: { lat: Number(latLongOrigin[0]), lng: Number(latLongOrigin[1]) }
 
-       });
+        });
 
         var marker = new google.maps.Marker({
 
             position: { lat: Number(latLongOrigin[0]), lng: Number(latLongOrigin[1]) },
 
             map: map
-        })  
+        })
         var marker = new google.maps.Marker({
 
             position: { lat: Number(latLongDest[0]), lng: Number(latLongDest[1]) },
@@ -62,11 +62,32 @@ function runQuery(queryURL) {
             map: map
         })
 
+        // WEATHER JSON FOLLOWS
 
-console.log("LAT LONG INITIAL FOLLOWS:")
-        console.log(latLongOrigin)
-        console.log(latLongDest)
-        var uluru = { lat: Number(latLongOrigin[0]), lng: Number(latLongOrigin[1]) }
+        var lat = Number(latLongDest[0])
+        var lon = Number(latLongDest[1])
+        var queryURL = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&APPID=9e016cbd27cc632126025c6503ebf608";
+
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).done(function(response) {
+            var city = response.name;
+            var descript = response.weather[0].description;
+            var temp = response.main.temp;
+            temp = Math.round(temp * 9 / 5 - 459.67)
+            var humid = response.main.humidity;
+            var wind = response.wind.speed;
+            console.log("WEATHER CITY/DESCRIPTION/TEMP/HUMID/WIND FOLLOWS");
+            console.log(city);
+            console.log(descript);
+            console.log(temp);
+            console.log(humid);
+            console.log(wind);
+        })
+
+
+        // var uluru = { lat: Number(latLongOrigin[0]), lng: Number(latLongOrigin[1]) }
         for (var i = 0; i < resultsRoutes.length; i++) {
             routeCounter++;
             resultsStops = resultsRoutes[i].stops;
@@ -123,7 +144,7 @@ console.log("LAT LONG INITIAL FOLLOWS:")
             `);
             $("#route-well-" + routeCounter).append(tableDef);
 
-            
+
         } //end first for loop 
 
 
