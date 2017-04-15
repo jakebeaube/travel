@@ -1,3 +1,5 @@
+// GLOBAL VARIABLES
+
 var searchTerm = "";
 var numResults = 0;
 var startYear = 0;
@@ -14,6 +16,8 @@ var resultsStops = [];
 var routeCounter = 0;
 var list = []; //holds long and lat. 
 
+// FUNCTIONS USED FOR EVENTS
+
 function runQuery(queryURL) {
     $.ajax({
         url: queryURL,
@@ -24,41 +28,42 @@ function runQuery(queryURL) {
         }
     }).done(function(travelData) {
 
+        // CONSOLE LOGS LEFT IN DURING PROTOTYPE DEVELOPMENT
 
         console.log("------------------------------------");
         console.log("URL: " + queryURL);
         console.log("------------------------------------");
         console.log(travelData);
         console.log("------------------------------------");
+
+        // ARRAYS LOADED FROM GET REQUEST
+
+        // resultsRoutes - contains all the routes to the destination
         resultsRoutes = travelData.routes;
+
+        // resultsPlaces - used for weather and google map API purposes
         resultsPlaces = travelData.places;
-        console.log(resultsRoutes);
-        console.log(resultsPlaces);
-
-
         var latLongOrigin = resultsPlaces[0].pos.split(",");
-
         var latLongDest = resultsPlaces[1].pos.split(",");
 
+        // ESTABLISH GOOGLE MAP
 
         var map = new google.maps.Map(document.getElementById('map'), {
-
             zoom: 4,
-
             center: { lat: Number(latLongOrigin[0]), lng: Number(latLongOrigin[1]) }
-
         });
 
+        //ESTABLISH MARKER 1 FOR MAP
+
         var marker = new google.maps.Marker({
-
             position: { lat: Number(latLongOrigin[0]), lng: Number(latLongOrigin[1]) },
-
             map: map
         })
+
+        //ESTABLISH MARKER 2 FOR MAP
+
         var marker = new google.maps.Marker({
-
             position: { lat: Number(latLongDest[0]), lng: Number(latLongDest[1]) },
-
             map: map
         })
 
@@ -86,8 +91,12 @@ function runQuery(queryURL) {
             console.log(wind);
         })
 
-
+        // FOLLOWING COMMENTED LINE OF CODE SAVED FOR FUTURE VERSION IF NEEDED
         // var uluru = { lat: Number(latLongOrigin[0]), lng: Number(latLongOrigin[1]) }
+
+        // CREATE HTML FOR EACH ROUTE RETRIEVED FROM API CALL
+        // NOTE: CONSOLE.LOGS LEFT IN FOR V2 DEVELOPMENT
+
         for (var i = 0; i < resultsRoutes.length; i++) {
             routeCounter++;
             resultsStops = resultsRoutes[i].stops;
@@ -151,6 +160,7 @@ function runQuery(queryURL) {
     });
 }
 
+// SEARCH CLICK EVENT CODE
 
 $("#run-search").on("click", function(event) {
     event.preventDefault();
@@ -161,6 +171,9 @@ $("#run-search").on("click", function(event) {
     var queryURL = queryURLBase + queryOrigin + searchTermOrigin + queryDestination + searchTermDstination;
     runQuery(queryURL);
 });
+
+// CLEAR EVENT CODE
+
 $("#clear-all").on("click", function() {
     routeCounter = 0;
     $("#well-section").empty();
