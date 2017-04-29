@@ -2,6 +2,17 @@
 
 https://jakebeaube.github.io/travel/
 
-Made with Valera Theme from BootstrapMade
+
+
+Developed by:
+Jamal Bailey
+Jake Beaube
+Denyse Huezo
+David Wilson
+
+Made with Valera Theme from BootstrapMade*
+
+*Not for commercial use!
+
 
 
